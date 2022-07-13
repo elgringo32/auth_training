@@ -7,12 +7,18 @@ const {adminAuth, basicAuth} = require('./middleware/auth')
 //Connect DB via db.js
 connectDB()
 
+app.set('view engine', 'ejs')
+
 app.use(express.json())
 app.use(cookieParser())
+
 app.use('/api/Auth', require('./Auth/Route'))
 
-app.get('/admin', adminAuth, (req, res) => res.send('Admin Route'))
-app.get('/basic', basicAuth, (req, res) => res.send('Basic Route'))
+app.get('/', (req, res) => res.render('home'))
+app.get('/register', (req, res) => res.render('register'))
+app.get('/login', (req, res) => res.render('login'))
+app.get('/admin', adminAuth, (req, res) => res.render('admin'))
+app.get('/basic', basicAuth, (req, res) => res.render('basic'))
 
 
 //setup server on port
