@@ -17,6 +17,10 @@ app.use('/api/Auth', require('./Auth/Route'))
 app.get('/', (req, res) => res.render('home'))
 app.get('/register', (req, res) => res.render('register'))
 app.get('/login', (req, res) => res.render('login'))
+app.get('/logout', (req, res) => {
+    res.cookie('jwt','',{maxAge: '1'})
+    res.redirect('/')
+})
 app.get('/admin', adminAuth, (req, res) => res.render('admin'))
 app.get('/basic', basicAuth, (req, res) => res.render('basic'))
 
