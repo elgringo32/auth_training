@@ -95,19 +95,54 @@ exports.login = async (req, res, next) => {
     }
 }
 
+exports.getUsers = async (req, res, next) => {
+    await User.find({})
+      .then((users) => {
+        const userFunction = users.map((user) => {
+          const container = {};
+          container.username = user.username;
+          container.role = user.role;
+          container.id = user._id;
+  
+          return container;
+        });
+        res.status(200).json({ user: userFunction });
+      })
+      .catch((err) =>
+        res.status(401).json({ message: "Not successful", error: err.message })
+      );
+  };
+  
+// exports.getAllUsers = async (req, res, next) => {
+//     await User.find()
+//         .then(data => {
+//             res.status(201).json({
+//                 data,
+//             })
+//         })
+//         .catch(err => {
+//             res.status(400).json({
+//                 message: "something went wrong"
+//             })
+//         }
+            
+//         )
+// } 
+
 exports.update = async (req, res, next) => {
     const {role, id} = req.body
     if (role && id) {
-        if (role === 'admin') {
+        if (role === 'Admin') {
             await User.findById(id)
             .then((user) => {
-                if (user.role != 'admin') {
+                if (user.role != 'Admin') {
                     user.role = role
                     user.save((err) => {
                         if (err) {
                             res.status(400).json({
                                 message: err.message
                             })
+                            console.log(err)
                             process.exit(1)
                         } else {
                             res.status(201).json({
@@ -125,8 +160,9 @@ exports.update = async (req, res, next) => {
             })
             .catch((err) => {
                 res.status(400).json({
-                    message: err.message
+                    message: err.message,
                 })
+                
             })
         } else {
             res.status(400).json({
@@ -158,3 +194,5 @@ exports.deleteUser = async (req, res, next) => {
             
         )
 } 
+
+

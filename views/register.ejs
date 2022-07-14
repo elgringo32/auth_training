@@ -9,13 +9,22 @@
   <%- include('./partials/header'); %>
 </header>
 
-<main>
-  <div class="jumbotron">
-    <h1>Login</h1>
-    <p>Form Goes Here</p>
-    <p>Button</p>
-  </div>
-</main>
+<main class="mb-5">
+    <div class="bg-light p-5">
+      <h1 class="mb-3">Sign Up</h1>
+      <div class="row">
+          <div id="error-message" class="bg-danger bg-gradient mb-3"></div>
+          <div class="col-3">
+              <form class="d-flex flex-column gap-2" name="login">
+                  <label for="username">Username</label>
+                  <input type="text" name="username" id="username">
+                  <label for="password">Password</label>
+                  <input type="password" name="password" id="password">
+              <input type="submit" value="register">
+          </div>
+      </div>
+    </div>
+  </main>
 
 <footer>
   <%- include('./partials/footer'); %>
@@ -23,3 +32,33 @@
 
 </body>
 </html>
+
+<script>
+    const form = document.querySelector('form')
+    const username = document.querySelector('#username')
+    const password = document.querySelector('#password')
+    const errorMessage = document.querySelector('#error-message')
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault()
+        try {
+            const res = await fetch('api/auth/register', {
+            method: 'POST',
+            body: JSON.stringify({username: username.value, password: password.value}),
+            headers: {'Content-Type': 'application/json'}
+            })
+            const data = await res.json()
+            if (res.status === 400 || res.status === 401) {
+                errorMessage.classList.add('p-2')
+                 errorMessage.innerHTML = `${data.message}`
+            } 
+            else {
+                data.role === 'admin' ? location.assign('/admin') : location.assign('/basic') 
+            }
+            
+        } catch(err) {
+            console.log(err.message)
+        }
+        
+        
+    })
+</script>
