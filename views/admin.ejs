@@ -27,22 +27,22 @@
 const userListings = document.querySelector('#user-listings')
 
 const getUsers = async () => {
-      const res = await fetch('/api/auth/getUsers')
-      const data = await res.json()
-        data.user.map((user) => {
-            let card = `<div class="card">
-                    <div class='card-body'>
-                    <h5 class='card-title'>user: ${user.username}</h5>
-                    <p class='card-subtitle mb-3'>role: ${user.role}</p>
-                    <button class="update-to-admin btn btn-success">Update To Admin</button>
-                    <button class="delete-permanently btn btn-danger">Delete Permanently</button>
-                    </div>
-                    </div>`
-            userListings.innerHTML += card
-        })
+    const res = await fetch('/api/auth/getUsers')
+    const data = await res.json()
+    data.user.map((user) => {
+        let card = `<div class="card">
+                <div class='card-body'>
+                <h5 class='card-title'>user: ${user.username}</h5>
+                <p class='card-subtitle mb-3'>role: ${user.role}</p>
+                <button class="update-to-admin btn btn-success">Update To Admin</button>
+                <button class="delete-permanently btn btn-danger">Delete Permanently</button>
+                </div>
+                </div>`
+        userListings.innerHTML += card
+    })
     const updateToAdminBtn = document.querySelectorAll('.update-to-admin')
     const deleteUserBtn = document.querySelectorAll('.delete-permanently')
-    console.log(updateToAdminBtn)
+
     updateToAdminBtn.forEach((button, i) => {
     button.addEventListener('click', async () => {
         const id = data.user[i].id
@@ -51,19 +51,22 @@ const getUsers = async () => {
               body: JSON.stringify({ role: 'Admin', id}),
               headers: { 'Content-Type': 'application/json' }
             })
-        console.log(JSON.stringify({ role: 'Admin', id}))
+        location.assign('/admin')
     })
-})
+    })
 
-
-
-
-    }
-
-
-
-
-
+    deleteUserBtn.forEach((button, i) => {
+    button.addEventListener('click', async () => {
+        const id = data.user[i].id
+        const res = await fetch('/api/auth/deleteUser', {
+              method: 'DELETE',
+              body: JSON.stringify({id}),
+              headers: { 'Content-Type': 'application/json' }
+            })
+        location.assign('/admin')
+    })
+    })
+}
 getUsers()
 
 </script>

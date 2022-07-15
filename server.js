@@ -26,7 +26,7 @@ app.get('/basic', basicAuth, (req, res) => res.render('basic'))
 
 
 //setup server on port
-const server = app.listen(PORT, () => console.log(`server connected to port ${PORT}`))
+const server = app.listen(PORT, () => console.log(`View on http://localhost:${PORT}`))
 
 //log server connection error and close server
 process.on('unhandledRejection', err => {
