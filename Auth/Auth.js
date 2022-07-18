@@ -76,7 +76,8 @@ exports.login = async (req, res, next) => {
                 res.cookie('jwt', token, {
                     httpOnly: true,
                     maxAge: maxAge * 1000,
-                })    
+                })
+                res.locals.authedUser = 1    
                 res.status(200).json({
                     message: "User successfully logged in",
                     user,
@@ -113,24 +114,10 @@ exports.getUsers = async (req, res, next) => {
       );
   };
   
-// exports.getAllUsers = async (req, res, next) => {
-//     await User.find()
-//         .then(data => {
-//             res.status(201).json({
-//                 data,
-//             })
-//         })
-//         .catch(err => {
-//             res.status(400).json({
-//                 message: "something went wrong"
-//             })
-//         }
-            
-//         )
-// } 
 
 exports.update = async (req, res, next) => {
     const {role, id} = req.body
+    console.log(req.cookie)
     if (role && id) {
         if (role === 'Admin') {
             await User.findById(id)

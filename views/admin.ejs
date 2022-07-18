@@ -41,32 +41,33 @@ const getUsers = async () => {
         userListings.innerHTML += card
     })
     const updateToAdminBtn = document.querySelectorAll('.update-to-admin')
-    const deleteUserBtn = document.querySelectorAll('.delete-permanently')
-
     updateToAdminBtn.forEach((button, i) => {
     button.addEventListener('click', async () => {
         const id = data.user[i].id
         const res = await fetch('/api/auth/update', {
-              method: 'PUT',
-              body: JSON.stringify({ role: 'Admin', id}),
-              headers: { 'Content-Type': 'application/json' }
+                method: 'PUT',
+                body: JSON.stringify({ role: 'Admin', id}),
+                headers: { 'Content-Type': 'application/json' }
             })
         location.assign('/admin')
     })
     })
 
+    const deleteUserBtn = document.querySelectorAll('.delete-permanently')
     deleteUserBtn.forEach((button, i) => {
     button.addEventListener('click', async () => {
         const id = data.user[i].id
         const res = await fetch('/api/auth/deleteUser', {
-              method: 'DELETE',
-              body: JSON.stringify({id}),
-              headers: { 'Content-Type': 'application/json' }
+            method: 'DELETE',
+            body: JSON.stringify({id}),
+            headers: { 'Content-Type': 'application/json' }
             })
         location.assign('/admin')
     })
-    })
+    })    
 }
 getUsers()
+
+
 
 </script>

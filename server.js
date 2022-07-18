@@ -3,7 +3,10 @@ const app = express()
 const PORT = 8000
 const connectDB = require('./db')
 const cookieParser = require('cookie-parser')
+const jwt = require('jsonwebtoken')
+const jwtSecret = process.env.JWT_SECRET
 const {adminAuth, basicAuth} = require('./middleware/auth')
+
 //Connect DB via db.js
 connectDB()
 
@@ -13,6 +16,22 @@ app.use(express.json())
 app.use(cookieParser())
 
 app.use('/api/Auth', require('./Auth/Route'))
+
+app.use(function(req, res, next){
+    // all the stuff from the example
+    const token = req.cookies.jwt
+    jwt.verify(token, jwtSecret, (err, decodedToken) => {
+        if (err) {
+            app.locals.authedUser = 0
+        } else {
+            app.locals.authedUser = 1 
+            }
+        }
+    )
+    next();
+  });
+
+app.locals.authedUser = 0
 
 app.get('/', (req, res) => res.render('home'))
 app.get('/register', (req, res) => res.render('register'))
